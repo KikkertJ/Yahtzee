@@ -1,4 +1,5 @@
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Random;
 import java.util.Scanner;
 
@@ -14,6 +15,12 @@ public class Yahtzee {
 
 class YahtzeeSpel {
 	final ArrayList<Dobbelsteen> Dobbelstenen = new ArrayList<Dobbelsteen>();
+	int blokkeerarray[] = { 0, 0, 0, 0, 0 };
+	Scanner scanner = new Scanner(System.in);
+	boolean doorgaan = true;
+	Worp worpwaarde = new Worp();
+	Speler henk = new Speler();
+	int uitslag [] = worpwaarde.uitslagworp;
 
 	YahtzeeSpel() {
 
@@ -25,8 +32,7 @@ class YahtzeeSpel {
 
 	public void spelen() {
 		System.out.println("Wil je doorgaan, druk dan op 'Enter'. Om te stoppen druk je op 'q'");
-		Scanner scanner = new Scanner(System.in);
-		boolean doorgaan = true;
+
 		while (doorgaan) {
 			String invoer = scanner.nextLine();
 			switch (invoer) {
@@ -38,23 +44,24 @@ class YahtzeeSpel {
 			case "":
 				doorgaan = true;
 				System.out.println("Je gaat nog een keer gooien.");
-				// int a = 0;
-
+				System.out.println("Je hebt nu de volgende stenen gegooid:");
+				System.out.println("1 2 3 4 5 ");
+				
 				for (int a = 0; a < Dobbelstenen.size(); a++) {
-					// System.out.println("in loop dobbelstenen!");
-					// for (int a = 0; a < blokkeerarray.length; a++) {
 					Dobbelsteen deHuidigeSteen = Dobbelstenen.get(a);
 					if (blokkeerarray[a] == 0) {
-						
-						deHuidigeSteen.werpen();
 
+						deHuidigeSteen.steen1 = deHuidigeSteen.werpen();
 					}
-					System.out.println(deHuidigeSteen.steen1 + " ");
+					worpwaarde.uitslag(deHuidigeSteen.steen1);
+					
 				}
-
+				henk.Geschiedenis(uitslag);
+				System.out.println("");
 				System.out.println("Welke stenen wil je vasthouden?");
 				vasthouden();
-
+				
+				
 				break;
 			default:
 				System.out.println(
@@ -63,25 +70,18 @@ class YahtzeeSpel {
 		}
 	}
 
-	int blokkeerarray[] = { 0, 0, 0, 0, 0 };
-
 	void vasthouden() {
-		// int blokkeerarray [] = {0,0,0,0,0};
 		Scanner invoer = new Scanner(System.in);
 		int plaats;
-		// int blok = 1;
 		String plekken = invoer.next();
-		System.out.println("Je wilt de volgende dobbelstenen vasthouden:");
+		System.out.println("Je wilt de volgende dobbelstenen vasthouden:" + plekken);
+		
 		for (int i = 0; i < plekken.length(); i++) {
 			String positie = plekken.substring(i, i + 1);
 			plaats = Integer.parseInt(positie) - 1;
 			this.blokkeerarray[plaats] = 1;
 
 		}
-
-		// blokkeerarray.add(blok, plaats);
-		// System.out.println(blokkeerarray);
-
 	}
 
 }
@@ -97,6 +97,24 @@ class Dobbelsteen {
 }
 
 class Worp {
-	int uitslagworp []; 
 
+	int uitslagworp [] = new int [5];
+	void uitslag (int steenwaarde) {
+		for (int i = 0 ; i < uitslagworp.length ; i++) {
+			uitslagworp[i] =  steenwaarde; 
+		}
+		System.out.print(steenwaarde + " ");
+	}
+}
+
+class Speler {
+	ArrayList worpGeschiedenis = new ArrayList();
+	
+	void Geschiedenis (int worpuitslag[]){
+		worpGeschiedenis.add(worpuitslag);
+		for (int p = 0 ; p < worpGeschiedenis.size(); p++) {
+		System.out.println(worpuitslag);
+		}
+	}
+	
 }
